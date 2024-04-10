@@ -13,9 +13,9 @@ font_height = 16
 gradient_symbols = " .:!/(l1Z4H9W8$@"
 
 objects = [  # список объектов на сцене
-    {"type": "sphere", "position": [0, 0, 0], "radius": 0.3},
-    {"type": "sphere", "position": [0.4, -0.07, 0.1], "radius": 0.075},
-    {"type": "box", "position": [0, 0.6, 0], "size": [0.2, 0.2, 0.2]},
+    {"type": "sphere", "position": [0, 0, 0], "radius": 0.3, "color": {"reflects": False}},
+    {"type": "sphere", "position": [0.4, -0.07, 0.1], "radius": 0.075, "color": {"reflects": False}},
+    {"type": "box", "position": [0, 0.8, 0], "size": [0.2, 0.2, 0.2], "color": {"reflects": True}},
 ]
 
 def minmax(value, min_, max_):
@@ -26,7 +26,7 @@ def vector_length(vector: list):
     """Определяет длину вектора по теореме Пифагора"""
     return math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
 
-def normalize(vector: list):
+def normalize(vector: list|np.ndarray):
     """Нормализация вектора"""
     length = vector_length(vector)
     return [vector[0]/length, vector[1]/length, vector[2]/length]
@@ -34,10 +34,11 @@ def normalize(vector: list):
 def sign(value):
     """Определяет знак числа или всех чисел в списке
     :return 0 если 0, -1 если отрицательное, 1 если положительное"""
-    if type(value) == list:
+    if type(value) == list or type(value) == np.ndarray:
         a = []
-        for i in value:
-            a.append((0 < i) - (i < 0))
+        for i in list(value):
+            # print(i, value)
+            a.append((0 < float(i)) - (float(i) < 0))
         return a
     return (0 < value) - (value < 0)
 
@@ -101,6 +102,55 @@ def box_intersect(cp: list, rd: list, box_size: list, box_position: list):
     return min(tn, tf), out_normal
 
 
+def reflects(ro: list | np.ndarray, rd: list | np.ndarray, ld: list, nd: list, oi: int = -1, ri: int = 0):
+    """Отражает луч для рисования отражений
+    :param ro: координаты начало луча
+    :param rd: вектор направления оригинального луча
+    :param ld: вектор направления света
+    :param nd: вектор направления нормали объекта
+    :param oi: номер объекта, от которого отразился луч
+    :param ri: номер переотражения
+    :return: уровень освещённости места отражения
+    """
+    reflected_dir = np.array(rd) - 2 * np.dot(nd, rd) * np.array(nd)
+    reflected_light = max(np.dot(-reflected_dir, normalize(ld)), 0) ** 16
+    min_distance = 9999
+    for reflected_obj_id in range(len(objects)):
+        if reflected_obj_id == oi:
+            continue
+        reflected_obj = objects[reflected_obj_id]
+        reflected_obj_distance = False
+        if reflected_obj["type"] == "sphere":
+            reflected_obj_distance = sphere_intersect(reflected_obj["position"], reflected_obj["radius"],
+                                                      list(ro), reflected_dir)
+            if reflected_obj_distance >= min_distance:
+                continue
+            reflected_intersection_pos = np.array(
+                np.array(ro) + np.array(reflected_dir) * reflected_obj_distance)
+            reflected_normal_dir = normalize(reflected_intersection_pos - np.array(reflected_obj["position"]))
+            if reflected_obj["color"]["reflects"] and ri < 2:  # отражения
+                reflected_light_2 = reflects(reflected_intersection_pos, reflected_dir, ld, reflected_normal_dir, reflected_obj_id, ri+1)
+            else:
+                reflected_light_2 = 0
+        elif reflected_obj["type"] == "box":
+            reflected_obj_distance, reflected_normal_dir = box_intersect(list(ro), reflected_dir,
+                                                                         reflected_obj["size"],
+                                                                         reflected_obj["position"])
+            if reflected_obj_distance >= min_distance:
+                continue
+            if reflected_obj["color"]["reflects"] and ri < 2:  # отражения
+                reflected_intersection_pos = np.array(
+                    np.array(ro) + np.array(reflected_dir) * reflected_obj_distance)
+                reflected_light_2 = reflects(reflected_intersection_pos, reflected_dir, ld, reflected_normal_dir, reflected_obj_id, ri+1)
+            else:
+                reflected_light_2 = 0
+        if reflected_obj_distance and reflected_obj_distance < min_distance:
+            min_distance = reflected_obj_distance
+            reflected_light += max(np.dot(-np.array(normalize(ld)), reflected_normal_dir), 0) * 0.5
+            reflected_light += reflected_light_2
+    return reflected_light
+
+
 def frame(time_, camera_pos, camera_dir, light_dir):
     screen = ""
     for symbol_y in range(height):
@@ -113,24 +163,36 @@ def frame(time_, camera_pos, camera_dir, light_dir):
                                  y])  # определение направления луча
             min_distance = 9999
             draw_light = 0
-            for obj in objects:
+            for obj_id in range(len(objects)):
+                obj = objects[obj_id]
                 if obj["type"] == "sphere":  # пересечения со сферой
                     sphere_distance = sphere_intersect(obj["position"], obj["radius"], camera_pos, ray_dir)
                     if sphere_distance:
                         intersection_pos = np.array(np.array(camera_pos) + np.array(ray_dir) * sphere_distance)
                         normal_dir = normalize(intersection_pos - np.array(obj["position"]))
-                        light = max(np.dot(-np.array(normalize(light_dir)), normal_dir), 0)
+                        light = max(np.dot(-np.array(normalize(light_dir)), normal_dir), 0)*0.65
+                        if obj["color"]["reflects"] and sphere_distance < min_distance:  # отражения
+                            light *= 0.5
+                            reflected_light = reflects(intersection_pos, ray_dir, light_dir, normal_dir, obj_id, 0)
+                        else:
+                            reflected_light = 0
                         if sphere_distance < min_distance:
                             min_distance = sphere_distance
-                            draw_light = light
-                if obj["type"] == "box":  # пересечения с параллелепипедом
+                            draw_light = light + reflected_light
+                elif obj["type"] == "box":  # пересечения с параллелепипедом
                     box_distance, normal_dir = box_intersect(camera_pos, ray_dir, obj["size"], obj["position"])
                     if box_distance:
-                        light = max(np.dot(-np.array(normalize(light_dir)), normal_dir), 0)
+                        light = max(np.dot(-np.array(normalize(light_dir)), normal_dir), 0)*0.65
+                        if obj["color"]["reflects"] and box_distance < min_distance:  # отражения
+                            light *= 0.5
+                            intersection_pos = np.array(np.array(camera_pos) + np.array(ray_dir) * box_distance)
+                            reflected_light = reflects(intersection_pos, ray_dir, light_dir, normal_dir, obj_id, 0)
+                        else:
+                            reflected_light = 0
                         if box_distance < min_distance:
                             min_distance = box_distance
-                            draw_light = light
-            screen += gradient_symbols[round(draw_light * 15)]  # рисование пикселя
+                            draw_light = light + reflected_light
+            screen += gradient_symbols[min(round(draw_light * 15), 15)]  # рисование пикселя
     sys.stdout.write(screen)  # рисование кадра
     sys.stdout.flush()
 
@@ -138,10 +200,12 @@ def frame(time_, camera_pos, camera_dir, light_dir):
 timer = 0
 camera_direction = [-1, 0, 0]
 camera_position = [1, 0, 0]
-# frame(timer, [1, 0, 0], camera_direction, [-0.75, -0.75, 1])
+mode = False
+# frame(timer, [1, 0, 0], camera_direction, [-0.70, 1, 1])
 
-def update():  # псевдоним для функции frame с параметрами для простого использования
-    frame(timer, camera_position, camera_direction,  [-0.5, 1, 1])  # [-math.sin(timer*0.1), -math.cos(timer*0.1), 1]
+def update(a: bool = False):  # псевдоним для функции frame с параметрами для простого использования
+    if (not a and mode) or (a and not mode):
+        frame(timer, camera_position, camera_direction, [-1, 0.2, 1])  # [-math.sin(timer*0.1), -math.cos(timer*0.1), 1]
 
 os.system('cls' if os.name == 'nt' else 'clear')
 update()
@@ -183,3 +247,4 @@ while True:
     except:
         break
     timer += 1
+    update(True)
