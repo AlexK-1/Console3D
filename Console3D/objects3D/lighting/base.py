@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence, Optional
 import math
+import numpy as np
 
 from ..base import BaseObject3D
 from ..objs_list import light_objects, figures_objects

@@ -4,6 +4,7 @@ from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequen
 from ..vec_functions import *
 from .base import BaseObject3D
 from .objs_list import camera_object
+from . import objs_list
 
 
 class Camera(BaseObject3D):
@@ -13,7 +14,7 @@ class Camera(BaseObject3D):
         """
         Создание объекта камеры. На сцене может быть только один объект камеры.
         """
-        # global camera_object
+        global camera_object
+
         super().__init__(position, direction)
-        camera_object.clear()  # очистка списка камер, так как камера там должна быть только одна
-        camera_object.append(self)  # добавление камеры в список с камерами
+        objs_list.camera_object = self

@@ -27,7 +27,7 @@ class Plane(BaseFigure):
         if np.abs(denominator) < 1e-6:
             return False, -1.0, [0.0, 0.0, 0.0]
         
-        t = np.dot(np.array(self.pos) - ro, self.dir) / denominator
+        t = np.dot(self.pos - ro, self.dir) / denominator
         
         if t < 0:
             return False, -1.0, [0.0, 0.0, 0.0]

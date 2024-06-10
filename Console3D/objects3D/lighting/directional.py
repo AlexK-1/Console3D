@@ -1,6 +1,7 @@
 from abc import ABC
-from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence, Optional
+from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence, Optional, List
 import math
+import numpy as np
 
 from .base import BaseLight
 
@@ -18,7 +19,7 @@ class DirectionalLight(BaseLight):
         """
         super().__init__([0, 0, 0], direction, power)
     
-    def get_dir(self, *args: Any, **kwargs: Any) -> Sequence[float]:
+    def get_dir(self, *args: Any, **kwargs: Any) -> np.ndarray:
         return self.dir
     
     def get_distance(self, position) -> float:

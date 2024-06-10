@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence, Optional
 import math
+import numpy as np
 
 from .base import BaseLight
 from ...vec_functions import *
@@ -16,7 +17,7 @@ class PointLight(BaseLight):
         """
         super().__init__(position, [0.0, 0.0, -1.0], power)
     
-    def get_dir(self, position) -> Sequence[float]:
+    def get_dir(self, position) -> np.ndarray:
         """Направление высчитывается относительно определённых координат (position),
         т.к. источник светит во все стороны"""
         return normalize(position - np.array(self.pos))

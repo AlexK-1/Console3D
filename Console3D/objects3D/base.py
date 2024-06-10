@@ -14,7 +14,7 @@ class BaseObject3D(ABC):
         :param position: позиция объекта
         :param direction: направление объекта
         """
-        self.pos = list(position)
+        self.pos = np.array(position)
         self.dir = normalize(direction)
     
     def move_to(self, position: Sequence[Union[float, int]]) -> Sequence[Union[float, int]]:
@@ -23,7 +23,7 @@ class BaseObject3D(ABC):
         :param position: новые координаты объекта
         :return: новые координаты объекта
         """
-        self.pos = position
+        self.pos = np.array(position)
         return self.pos
 
     def rotate_to(self, direction: Sequence[float]) -> Sequence[float]:

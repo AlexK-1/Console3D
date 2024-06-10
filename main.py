@@ -5,19 +5,26 @@ from Console3D.vec_functions import normalize, rotate_vector_z
 import numpy as np
 import keyboard
 import math
+import os
+import time
 
 
-camera = objects3D.Camera([1, 0, 0], [-1.0, 0.0, 0.0])
+camera = objects3D.Camera([1, 0, 0], [-1, 0.0, 0.0])
 
 sphere = figures.Sphere([0, 0, 0], 0.3)
 sphere2 = figures.Sphere([0.4, -0.07, 0], 0.075)
 box = figures.Box([0, 1, 0], [1, 0, 0], [0.3, 0.3, 0.3])
 plane = figures.Plane([0, 0, -0.3], [0.0, 0.0, 1.0])
 
-# light = DirectionalLight(normalize([-0.7, 0.2, -0.5]), 1)
-light = lighting.PointLight([1, 1, 1], 0.5)
+# light = lighting.DirectionalLight(normalize([-0.7, 0.2, -0.5]), 1)
+light = lighting.PointLight([0.7, 0.2, 1], 1)
 
-# draw_frame()
+# all_fps = []
+# for i in range(100):
+#     all_fps.append(draw_frame())
+# print("Mean FPS:", sum(all_fps)/len(all_fps))
+
+draw_frame()
 
 timer = 0
 while True:
@@ -49,6 +56,7 @@ while True:
     except:
         break
     timer += 1
-    light.pos[0] = math.sin(timer * 0.15)*1.5
-    light.pos[1] = math.cos(timer * 0.15)*1.5
-    draw_frame()
+    # box.pos[0] = math.sin(timer * 0.15)*1.5
+    # box.pos[1] = math.cos(timer * 0.15)*1.5
+    fps = draw_frame()
+    time.sleep(max(1.0 / 60 - (1 / fps), 0))

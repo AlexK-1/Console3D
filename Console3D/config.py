@@ -7,3 +7,5 @@ font_width = 8  # ширина и высота одного символа те�
 font_height = 16
 
 max_re_reflections = 2
+
+debug = False
