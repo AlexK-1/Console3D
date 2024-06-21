@@ -9,17 +9,17 @@ from ...utils import *
 
 
 class Plane(BaseFigure):
-    """Объект плоскости. Плоскость имеет только позицию z. Плоскость бесконечна"""
+    """An object of an infinite plane"""
     def __init__(self, position: Sequence[Union[int, float]], direction: Sequence[float], reflects: Union[int, float] = 0, visible: bool = True) -> NoReturn:
         """
-        Создание объекта плоскости.
-        :param position: координата точки на плоскости
-        :param direction: направление нормали плоскости
-        :param reflects: способность объекта отражать другие объекты (работать как зеркало)
-        :param visible: будет ли отрисовываться эта фигура
+        Creating a plane object.
+        :param position: the coordinate of a point on the plane
+        :param direction: the direction of the plane normal
+        :param reflects: the ability of an object to reflect other objects (work as a mirror)
+        :param visible: will this figure be rendered
         """
         super().__init__(position, direction, 1.0, reflects, visible)
-    
+
     def ray_intersection_fn(self, ro: Sequence[Union[int, float]], rd: Sequence[float]) -> Tuple[bool, float, Sequence[float]]:
         """Функция пересечения луча с плоскостью."""
         denominator = np.dot(rd, self.dir)

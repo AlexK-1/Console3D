@@ -9,7 +9,7 @@ from ...utils import *
 
 
 class Sphere(BaseFigure):
-    """Объект сферы."""
+    """The object of the sphere."""
     def __init__(self,
                  position: Sequence[Union[int, float]],
                  diameter: Union[int, float],
@@ -17,11 +17,11 @@ class Sphere(BaseFigure):
                  visible: bool = True
                 ) -> NoReturn:
         """
-        Создание объекта сферы.
-        :param position: координаты центра сфера
-        :param diameter: диаметр сферы
-        :param reflects: способность объекта отражать другие объекты (работать как зеркало)
-        :param visible: будет ли отрисовываться эта сфера
+        Creating a sphere object.
+        :param position: coordinates of the center of the sphere
+        :param diameter: diameter of the sphere
+        :param reflects: the ability of an object to reflect other objects (work as a mirror)
+        :param visible: will this sphere be rendered
         """
         super().__init__(position, [1.0, 0.0, 0.0], diameter, reflects, visible)
         self.cache_size_squared = None

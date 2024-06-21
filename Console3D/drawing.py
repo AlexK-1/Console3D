@@ -61,7 +61,7 @@ cache_width = (screen_proportion * font_proportion / 2)
 #     return fps
 
 def draw_frame() -> NoReturn:
-    """Отрисовывает один кадр."""
+    """Renders one frame."""
     screen = []
     start_time = time.time()
     
@@ -72,16 +72,12 @@ def draw_frame() -> NoReturn:
     try:
         fps = 1/(end_time-start_time)
     except ZeroDivisionError:
-        fps = "Infinity"
-    fps_string = f"FPS: {fps}"
-    screen[width:len(fps_string)+width] = fps_string
+        fps = float("inf")
 
-    start_time = time.time()
     screen = "".join(screen)
     sys.stdout.write(screen)  # рисование кадра
     sys.stdout.flush()
     # os.write(screen)
-    print(f"Frame display: {time.time() - start_time}")
     return fps
 
 def pixel(pixel_id: int) -> str:

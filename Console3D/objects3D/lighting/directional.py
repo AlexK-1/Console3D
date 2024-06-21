@@ -8,14 +8,14 @@ from .base import BaseLight
 
 class DirectionalLight(BaseLight):
     """
-    Направленный источник света. Не имеет положения, есть только направление.
-    Светит только в одну сторону. Является аналогом солнечного освещения.
+    A directional light source. It has no position, there is only a direction.
+    It shines only in one direction. It is an analogue of solar lighting.
     """
     def __init__(self, direction: Sequence[float], power: Union[int, float]) -> NoReturn:
         """
-        Создание направленного источника освещения.
-        :param direction: направление источника света
-        :param power: сила источника света от 0 до 1
+        Creating a directional lighting source.
+        :param direction: the direction of the light source
+        :param power: light source power from 0 to 1
         """
         super().__init__([0, 0, 0], direction, power)
     

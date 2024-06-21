@@ -8,11 +8,11 @@ from . import objs_list
 
 
 class Camera(BaseObject3D):
-    """Класс камеры, из которой будет видеть пользователь."""
+    """The class of the camera that the user will see from."""
 
     def __init__(self, position: Sequence[Union[float, int]], direction: Sequence[float]) -> NoReturn:
         """
-        Создание объекта камеры. На сцене может быть только один объект камеры.
+        Creating a camera object. There can only be one camera object on the scene.
         """
         global camera_object
 

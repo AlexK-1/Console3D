@@ -10,7 +10,7 @@ from ...utils import *
 
 
 class Box(BaseFigure):
-    """Объект прямоугольного параллелепипеда."""
+    """The object of a rectangular parallelepiped."""
     def __init__(self,
                  position: Sequence[Union[int, float]],
                  direction: Sequence[float],
@@ -19,12 +19,12 @@ class Box(BaseFigure):
                  visible: bool = True
                 ) -> NoReturn:
         """
-        Создание объекта прямоугольного параллелепипеда.
-        :param position: координаты центра
-        :param direction: вектор направления одной из граней
-        :param size: размер параллелепипеда по трём осям
-        :param reflects: способность объекта отражать другие объекты (работать как зеркало)
-        :param visible: будет ли отрисовываться эта фигура
+        Creating a rectangular parallelepiped object.
+        :param position: coordinates of the center
+        :param direction: the direction vector of one of the faces
+        :param size: the size of the parallelepiped along three axes
+        :param reflects: the ability of an object to reflect other objects (work as a mirror)
+        :param visible: will this figure be rendered
         """
         super().__init__(position, direction, size, reflects, visible)
 

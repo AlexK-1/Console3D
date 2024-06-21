@@ -8,7 +8,7 @@ def vector_length(vector: Sequence[float]) -> float:
     return math.sqrt(vector[0]**2 + vector[1]**2 + vector[2]**2)
 
 def normalize(vector: Sequence[float]) -> np.ndarray:
-    """Нормализация вектора"""
+    """Normalization of the vector"""
     length = vector_length(vector)
     return np.array([vector[0]/length, vector[1]/length, vector[2]/length])
 

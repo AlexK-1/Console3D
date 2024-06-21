@@ -8,12 +8,12 @@ from ...vec_functions import *
 
 
 class PointLight(BaseLight):
-    """Класс точечного источника освещения. Светит во все стороны сразу и имеет позицию."""
+    """The class of the point light source. It shines in all directions at once and has a position."""
     def __init__(self, position: Sequence[Union[float, int]], power: Union[int, float]) -> NoReturn:
         """
-        Создание точечного источника света.
-        :param position: позиция точечного источника
-        :param power: сила источника света от 0 до 1
+        Creating a point light source.
+        :param position: position of the point source
+        :param power: light source power from 0 to 1
         """
         super().__init__(position, [0.0, 0.0, -1.0], power)
     
