@@ -239,3 +239,4 @@ fabric.properties
 .idea/
 .vscode/
 images/
+!Console3D/objects3D/figures/shadows_cache.py

@@ -12,11 +12,11 @@ from .vec_functions import *
 from .objects3D.objs_list import figures_objects
 from .objects3D import objs_list
 from .objects3D.figures.base import BaseFigure
-from .objects3D.figures import cache
+from .objects3D.figures import shadows_cache
 
 
 for i in range(width):
-    cache.shadows_cache.append(None)
+    shadows_cache.shadows_cache.append(None)
 
 gradient_symbols = " .:!/(l1Z4H9W8$@"
 

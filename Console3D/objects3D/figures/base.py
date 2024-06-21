@@ -7,7 +7,7 @@ from ..base import BaseObject3D
 from ..objs_list import light_objects, figures_objects
 from ..lighting.base import BaseLight
 from ...utils import *
-from .cache import shadows_cache
+from .shadows_cache import shadows_cache
 from ...config import debug
 
 
