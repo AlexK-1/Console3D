@@ -7,9 +7,10 @@ The rendering is carried out according to the [raytracing](https://en.wikipedia.
 
 # Getting started
 
-Enter this command into the terminal\shell to clone this repository:
+Enter these commands in terminal\shell to clone this repository and install the necessary libraries:
 ```shell
 git clone https://github.com/AlexK-1/Console3D.git
+pip install -r requirements.txt
 ```
 In the newly created folder, create a file (for example, `main.py `)
 and write the code for creating and rendering a 3D scene in it,
