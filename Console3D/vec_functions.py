@@ -44,6 +44,26 @@ def rotate_vector_z(vector: Sequence[float], degree: Union[float, int]) -> np.nd
     new_y = vector[0] * math.sin(math.radians(degree)) + vector[1] * math.cos(math.radians(degree))
     return np.array([new_x, new_y, vector[2]])
 
+def rotate_vector_x_rad(vector: Sequence[float], rad: Union[float, int]) -> np.ndarray:
+    new_y = vector[1] * math.cos(rad) - vector[2] * math.sin(rad)
+    new_z = vector[1] * math.sin(rad) + vector[2] * math.cos(rad)
+    return np.array([vector[0], new_y, new_z])
+
+def rotate_vector_y_rad(vector: Sequence[float], rad: Union[float, int]) -> np.ndarray:
+    new_x = vector[0] * math.cos(rad) - vector[2] * math.sin(rad)
+    new_z = vector[0] * math.sin(rad) + vector[2] * math.cos(rad)
+    return np.array([new_x, vector[1], new_z])
+
+def rotate_vector_z_rad(vector: Sequence[float], rad: Union[float, int]) -> np.ndarray:
+    new_x = vector[0] * math.cos(rad) - vector[1] * math.sin(rad)
+    new_y = vector[0] * math.sin(rad) + vector[1] * math.cos(rad)
+    return np.array([new_x, new_y, vector[2]])
+
+def rotate_vector_rodrigues(vector: Sequence[float], vector_2: Sequence[float], rad: Union[float, int]):
+    return ((np.array(vector) * math.cos(rad)) +
+            (np.cross(vector_2, vector) * math.sin(rad)) +
+            (vector_2 * np.dot(vector_2, vector)) * (1 - math.cos(rad)))
+
 def reflect(vector: Sequence[float], normal: Sequence[float]) -> np.ndarray:
     """Отражает вектор относительно нормали поверхности"""
     return np.array(vector) - 2 * np.dot(normal, vector) * np.array(normal)

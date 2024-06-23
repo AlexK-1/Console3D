@@ -94,8 +94,9 @@ def pixel(pixel_id: int) -> str:
     x = (pixel_x / height) * font_proportion - cache_width
     y = (pixel_y / height) - 0.5  # приведение координат пикселя к значениям, близким к 1 0 -1
 
-    ray_dir = rotate_vector_z(objs_list.camera_object.dir, -55*x)  # определение направления луча
-    ray_dir[2] = -y
+    ray_dir = rotate_vector_z_rad(objs_list.camera_object.dir, -x)
+    # ray_dir = rotate_vector_rodrigues(ray_dir, rotate_vector_z(ray_dir, 90), y)
+    ray_dir[2] = ray_dir[2]-y
     ray_dir = normalize(ray_dir)
 
     draw_light = ray(objs_list.camera_object.pos, ray_dir)
