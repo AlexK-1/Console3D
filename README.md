@@ -59,13 +59,13 @@ draw_frame()  # drawing a single frame to the terminal/console
 
 All 3D objects are inherited from the class
 `Console3D.objects3D.base.BaseObject3D`. Any 3D object has a position and
-direction parameter, but not all objects use them.
+direction (the direction can be expressed as a vector or as a list of degrees along three axes) parameter, but not all objects use them.
 
 The `pos` method contains the coordinates of the object,
 and the `dir` method contains the direction.
 
 You can use the `rotate_x`, `rotate_y` and `rotate_z` methods to rotate
-an object around a specific axis.
+an object around a certain axis, but only if the direction of the object is a vector.
 
 ```python
 from Console3D.objects3D.base import BaseObject3D
@@ -84,8 +84,8 @@ some_object.rotate_z(180)  # rotate an object around the Z axis
 ## Figures
 
 Figures are 3D objects that you can see.
-There are 3 figures in the `Console3D` library as standard: sphere,
-box and plane, but you can add your own figures classes as well.
+There are 6 figures in the `Console3D` library as standard: sphere,
+box, plane, polygone, cylinder, capsule, but you can add your own figures classes as well.
 The ready-made figures classes and the base figure class are located
 in the `Console3D.objects3D.figures`.
 
@@ -99,6 +99,9 @@ from Console3D.objects3D import figures
 sphere = figures.Sphere([0, 0, 0], 0.3)
 box = figures.Box([0, 1, 0], [1, 0, 0], [0.3, 0.3, 0.3])
 plane = figures.Plane([0, 0, -0.3], [0.0, 0.0, 1.0])
+polygon = figures.Polygon([0, 0, 0], [0, 0.3, 0], [0, 0, 0.4])
+cylinder = figures.Cylinder(0.2, [0, -0.4, 0.2], [0, 0.2, 0])
+capsule = figures.Capsule(0.2, [0, -0.4, 0.2], [0, 0.2, 0])
 ```
 
 All figures have parameters `visibility` and the ability to reflect
@@ -110,7 +113,7 @@ direction (in the form of a vector) and a size.
 The class `Console3D.objects3D.figures.Sphere` is drawn as
 a perfectly flat sphere and has 4 parameters: `position`
 coordinates of the center of the sphere in three-dimensional space,
-`diameter`, `reflections` from 0 to 1 denotes the degree of specularity,
+`diameter`, `reflects` from 0 to 1 denotes the degree of specularity,
 `visible` if `false`, then the sphere will be invisible.
 
 ```python
@@ -125,7 +128,7 @@ The class `Console3D.objects3D.figures.Box` looks like a
 rectangular parallelepiped, it accepts the parameters `position`,
 `direction` as a vector of the direction of one of its faces
 *(does not work)*, `size` as a list of box sizes along
-the X, Y and Z axes, `reflections`, `visible`.
+the X, Y and Z axes, `reflects`, `visible`.
 
 ```python
 from Console3D.objects3D import figures
@@ -148,12 +151,52 @@ plane = figures.Plane([x_position, y_position, z_position],
                       direction, reflections, visible)
 ```
 
+### Polygone
+The class `Console3D.objects3D.figures.Polygon` is a triangular
+polygon defined by the coordinates of the three vertices
+`vertex0`, `vertex1` and `vertex2`, and the class also accepts
+the parameters `reflects` and `visible`.
+
+```python
+from Console3D.objects3D import figures
+
+polygon = figures.Polygon(first_vertex_pos, second_vertex_pos,
+                          third_vertex_pos, reflections, visible)
+```
+
+### Cylinder
+The class `Console3D.objects3D.figures.Cylinder` is a cylinder bounded
+with two circular planes. It accepts the parameters `radius`,
+`face0` coordinates of the first face, `face1` coordinates
+of the second face, `reflects`, `visible`.
+
+```python
+from Console3D.objects3D import figures
+
+cylinder = figures.Cylinder(radius, first_face_pos, second_face_pos,
+                         reflections, visible)
+```
+
+### Capsule
+The `Console3D.objects3D.figures' class.Capsule` looks like
+a cylinder with hemispheres instead of flat caps. Accepts
+the parameters `radius`, `cap0` and `cap1` coordinates of the
+covers, `reflections` and `visible`.
+
+```python
+from Console3D.objects3D import figures
+
+cylinder = figures.Cylinder(radius, first_cap_pos, second_cap_pos, 
+                            reflections, visible)
+```
+
 ### Your figures
 To create your own figure, you must create a class inherited
 from the base figure class
 `Console3D.objects3D.figures.base.BaseFigure`. Your class should
 preferably have the `reflections` and `visible` parameters.
 In the class constructor, you must call the `BaseFigure` constructor.
+If your shape has a direction, and it is a vector, you should normalize it.
 
 In order for your figure to be drawn, you need to create the
 `ray_intersection_fn` method in your figure class, it determines
@@ -165,19 +208,24 @@ the distance from the beginning of the ray to the intersection
 point and the direction of the normal figure at the
 intersection point.
 
+You can also add the `normal_dir` method to your class,
+which determines the direction of the normal at a certain
+point and use this method in the `ray_intersection_fn` method.
+
 Example:
 ```python
 from typing import Union, NoReturn, Tuple, Sequence
 from Console3D.objects3D.figures.base import BaseFigure
+from Console3D.vec_functions import normalize
 
 
 class MyFigure(BaseFigure):
-    def __init__(self,  # In this example, there is no `direction` parameter specifically
+    def __init__(self,  # In this example, there is no `size` parameter specifically
                  position: Sequence[Union[int, float]],
-                 size: Union[int, float, Sequence[Union[int, float]]],
+                 direction: Sequence[float],
                  reflects: Union[float, int] = 0,
                  visible: bool = True) -> NoReturn:
-        super().__init__(position, [0.0, 0.0, 0.0], size, reflects, visible)
+        super().__init__(position, normalize(direction), 1, reflects, visible)  # the direction is normalized because it is a vector
     def ray_intersection_fn(self, ro: Sequence[Union[int, float]],
                             rd: Sequence[float]) -> Tuple[bool, float, Sequence[float]]:
         """
@@ -251,7 +299,7 @@ To create your own light source object, you need to create
 a class inherited from the base class of lighting sources
 `Console3D.objects3D.lightning.base.BaseLight`. The required
 parameter of your light source class is `power`, optional
-parameters are `direction` and `position`.
+parameters are `direction` (should be normalized if the vector is) and `position`.
 
 In the constructor of your light source class, you must call
 the constructor of the parent class, and in addition to the
@@ -287,7 +335,7 @@ You can't see the camera. The camera must be on the stage, otherwise
 rendering of the scene will be impossible. If you create multiple camera
 objects, only the last one created will be used.
 
-The camera has `position` and `direction` parameters.
+The camera has `position` and `direction` (vector) parameters.
 
 ```python
 from Console3D import objects3D

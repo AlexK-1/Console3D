@@ -25,12 +25,14 @@ class Sphere(BaseFigure):
         """
         super().__init__(position, [1.0, 0.0, 0.0], diameter, reflects, visible)
         self.cache_size_squared = None
+        self.cache_size_squared_pr = 0
 
     def ray_intersection_fn(self, ro: Sequence[Union[int, float]], rd: Sequence[float]) -> Tuple[bool, float, Sequence[float]]:
         """Функция пересечения луча со сферой"""
         b = 2 * np.dot(rd, ro - self.pos)
-        if not self.cache_size_squared:
+        if not self.cache_size_squared or self.cache_size_squared_pr != self.size:
             self.cache_size_squared = self.size ** 2
+            self.cache_size_squared_pr = self.size
         c = np.linalg.norm(ro - self.pos) ** 2 - self.cache_size_squared
         delta = b ** 2 - 4 * c
         if delta > 0:

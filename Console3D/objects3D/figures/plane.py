@@ -18,7 +18,7 @@ class Plane(BaseFigure):
         :param reflects: the ability of an object to reflect other objects (work as a mirror)
         :param visible: will this figure be rendered
         """
-        super().__init__(position, direction, 1.0, reflects, visible)
+        super().__init__(position, normalize(direction), 1.0, reflects, visible)
 
     def ray_intersection_fn(self, ro: Sequence[Union[int, float]], rd: Sequence[float]) -> Tuple[bool, float, Sequence[float]]:
         """Функция пересечения луча с плоскостью."""

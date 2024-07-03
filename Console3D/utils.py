@@ -8,6 +8,15 @@ def minmax(value: Union[float, int], min_: Union[float, int], max_: Union[float,
     """Ограничение числа value сверху и снизу числами min_ и max_"""
     return max(min(value, max_), min_)
 
+def max_(*args):
+    result = []
+    for i in range(len(args[0])):
+        a = []
+        for j in range(len(args)):
+            a.append(args[j][i])
+        result.append(max(a))
+    return result
+
 def log(name: str):
     def inner_decorator(fn):
         def wrapper(*args, **kwargs):

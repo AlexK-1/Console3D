@@ -15,7 +15,7 @@ class BaseObject3D(ABC):
         :param direction: направление объекта
         """
         self.pos = np.array(position)
-        self.dir = normalize(direction)
+        self.dir = np.array(direction)
     
     def move_to(self, position: Sequence[Union[float, int]]) -> Sequence[Union[float, int]]:
         """

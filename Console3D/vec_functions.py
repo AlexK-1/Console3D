@@ -21,13 +21,16 @@ def sign(value: Union[Sequence[Union[float, int]], float, int]) -> Union[int, li
         return list(map(element_sign, value))
     return (0 < value) - (value < 0)
 
-def step(edge: Sequence[Union[float, int]], x: Sequence[Union[float, int]]) -> list:
+def step(edge: Union[Sequence[Union[float, int]], int, float], x: Sequence[Union[float, int]]) -> list:
     """Определяет, больше значения списка x соответствующих значений списка edge
     :return: Список чисел (0 если меньше или равно, 1 если больше)"""
 
     def element_step(i):
-        return int(x[i] > edge[i])
-    return list(map(element_step, range(len(edge))))
+        try:
+            return int(x[i] > edge[i])
+        except IndexError:
+            return int(x[i] > edge)
+    return list(map(element_step, range(len(x))))
 
 def rotate_vector_x(vector: Sequence[float], degree: Union[float, int]) -> np.ndarray:
     new_y = vector[1] * math.cos(math.radians(degree)) - vector[2] * math.sin(math.radians(degree))

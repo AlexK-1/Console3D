@@ -13,6 +13,8 @@ class Camera(BaseObject3D):
     def __init__(self, position: Sequence[Union[float, int]], direction: Sequence[float]) -> NoReturn:
         """
         Creating a camera object. There can only be one camera object on the scene.
+        :param position: camera coordinates
+        :param direction: the direction of the camera as a vector
         """
         global camera_object
 
