@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence
 import numpy as np
 import math
@@ -21,7 +21,7 @@ class BaseFigure(BaseObject3D):
                  size: Union[int, float, Sequence[Union[int, float]]],
                  reflects: Union[float, int] = 0,
                  visible: bool = True
-                ) -> NoReturn:
+                ):
         """
         Создание фигуры.
         :param position: позиция центра фигуры
@@ -50,7 +50,8 @@ class BaseFigure(BaseObject3D):
         if not self.visible:
             return False, -1.0, [0.0, 0.0, 0.0]
         return self.ray_intersection_fn(ro, rd)
-    
+
+    @abstractmethod
     def ray_intersection_fn(self, ro: Sequence[Union[int, float]], rd: Sequence[float]) -> Tuple[bool, float, Sequence[float]]:
         """
         Функция пересечения луча с фигурой. В классе фигуры должна быть перезаписана.

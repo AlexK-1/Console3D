@@ -16,7 +16,7 @@ class Cylinder(BaseFigure):
                  face1: Sequence[float],
                  reflects: Union[float, int] = 0,
                  visible: bool = True
-                 ) -> NoReturn:
+                 ):
         """
         Creating a cylinder based on the radius of its faces and their coordinates
         :param radius: the radius of the face

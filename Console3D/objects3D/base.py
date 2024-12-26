@@ -8,7 +8,7 @@ class BaseObject3D(ABC):
     """
     Базовый класс 3D объекта (фигура, источник света и т.д.)
     """
-    def __init__(self, position: Sequence[Union[float, int]], direction: Sequence[float]) -> NoReturn:
+    def __init__(self, position: Sequence[Union[float, int]], direction: Sequence[float]):
         """
         Создание 3D объекта
         :param position: позиция объекта

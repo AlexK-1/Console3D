@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Union, Any, Callable, Dict, NoReturn, Iterable, Tuple, Sequence, Optional
 import math
 import numpy as np
@@ -27,13 +27,15 @@ class BaseLight(BaseObject3D):
         super().__init__(position, direction)
         self.power = power
         light_objects.append(self)  # добавление источника освещения в список
-    
+
+    @abstractmethod
     def get_dir(self, *args: Any, **kwargs: Any) -> Sequence[float]:
         """
-        Возвращает направление света (может быть, например, светить всегда в одну сторону или во все стороны)
+        Возвращает направление света (может, например, светить всегда в одну сторону или во все стороны)
         """
         pass
 
+    @abstractmethod
     def get_distance(self, position) -> float:
         """
         Определяет расстояние от источника света до определённой точки

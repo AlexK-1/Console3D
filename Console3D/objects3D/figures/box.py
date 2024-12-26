@@ -17,7 +17,7 @@ class Box(BaseFigure):
                  size: Sequence[Union[int, float]],
                  reflects: Union[float, int] = 0,
                  visible: bool = True
-                ) -> NoReturn:
+                ):
         """
         Creating a rectangular parallelepiped object.
         :param position: coordinates of the center

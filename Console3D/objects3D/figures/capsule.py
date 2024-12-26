@@ -16,7 +16,7 @@ class Capsule(BaseFigure):
                  cap1: Sequence[float],
                  reflects: Union[float, int] = 0,
                  visible: bool = True
-                 ) -> NoReturn:
+                 ):
         """
         Creating a capsule object based on the coordinates of its caps
         :param radius: the radius of the capsule

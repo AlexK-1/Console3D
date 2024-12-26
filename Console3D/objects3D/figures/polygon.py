@@ -16,7 +16,7 @@ class Polygon(BaseFigure):
                  vertex2: Sequence[Union[int, float]],
                  reflects: Union[float, int] = 0,
                  visible: bool = True
-                 ) -> NoReturn:
+                 ):
         """
         Creating a triangular polygon based on its three vertices.
         :param vertex0: coordinates of the first vertex
@@ -26,7 +26,7 @@ class Polygon(BaseFigure):
         :param visible: will this figure be rendered
         """
         super().__init__([np.mean([vertex0[0], vertex1[0], vertex2[0]]), np.mean([vertex0[1], vertex1[1], vertex2[1]]), np.mean([vertex0[2], vertex1[2], vertex2[2]])],
-                         [0.0, 0.0, -1.0],0.0, reflects, visible)
+                         [0.0, 0.0, -1.0], 0.0, reflects, visible)
         self.vertex0 = np.array(vertex0)
         self.vertex1 = np.array(vertex1)
         self.vertex2 = np.array(vertex2)

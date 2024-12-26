@@ -11,7 +11,7 @@ class DirectionalLight(BaseLight):
     A directional light source. It has no position, there is only a direction.
     It shines only in one direction. It is an analogue of solar lighting.
     """
-    def __init__(self, direction: Sequence[float], power: Union[int, float]) -> NoReturn:
+    def __init__(self, direction: Sequence[float], power: Union[int, float]):
         """
         Creating a directional lighting source.
         :param direction: the direction of the light source

@@ -10,7 +10,7 @@ from ...utils import *
 
 class Plane(BaseFigure):
     """An object of an infinite plane"""
-    def __init__(self, position: Sequence[Union[int, float]], direction: Sequence[float], reflects: Union[int, float] = 0, visible: bool = True) -> NoReturn:
+    def __init__(self, position: Sequence[Union[int, float]], direction: Sequence[float], reflects: Union[int, float] = 0, visible: bool = True):
         """
         Creating a plane object.
         :param position: the coordinate of a point on the plane

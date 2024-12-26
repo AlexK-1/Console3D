@@ -9,7 +9,7 @@ from ...vec_functions import *
 
 class PointLight(BaseLight):
     """The class of the point light source. It shines in all directions at once and has a position."""
-    def __init__(self, position: Sequence[Union[float, int]], power: Union[int, float]) -> NoReturn:
+    def __init__(self, position: Sequence[Union[float, int]], power: Union[int, float]):
         """
         Creating a point light source.
         :param position: position of the point source

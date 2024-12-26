@@ -15,7 +15,7 @@ class Sphere(BaseFigure):
                  diameter: Union[int, float],
                  reflects: Union[int, float] = 0,
                  visible: bool = True
-                ) -> NoReturn:
+                ):
         """
         Creating a sphere object.
         :param position: coordinates of the center of the sphere
